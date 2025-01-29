@@ -1,35 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [iframeInner, setIframeInner] = useState(defaultIframeInner);
+
+  const dataSrc = `data:text/html,${iframeInner}`;
+  const blobUrl = URL.createObjectURL(
+    new Blob([iframeInner], { type: "text/html" }),
+  );
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <h1 className="text-3xl font-bold">iframe lab</h1>
 
-export default App
+      <div className="flex gap-8 mt-4">
+        <textarea
+          onChange={(e) => setIframeInner(e.target.value)}
+          defaultValue={iframeInner}
+          className="w-[600px] p-2 border rounded-sm"
+          autoFocus
+        />
+
+        <div className="space-y-4">
+          <div>
+            <p>src="data:text/html..." sandbox="allow-scripts"</p>
+            <iframe
+              src={dataSrc}
+              sandbox="allow-scripts"
+              className="border rounded-sm"
+            />
+          </div>
+          <div>
+            <p>
+              src="data:text/html..." sandbox="allow-scripts allow-same-origin"
+            </p>
+            <iframe
+              src={dataSrc}
+              sandbox="allow-scripts allow-same-origin"
+              className="border rounded-sm"
+            />
+          </div>
+          <div>
+            <p>src="blob:..." sandbox="allow-scripts"</p>
+            <iframe
+              src={blobUrl}
+              sandbox="allow-scripts"
+              className="border rounded-sm"
+            />
+          </div>
+          <div>
+            <p>src="blob:..." sandbox="allow-scripts allow-same-origin"</p>
+            <iframe
+              src={blobUrl}
+              sandbox="allow-scripts allow-same-origin"
+              className="border rounded-sm"
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default App;
+
+const defaultIframeInner = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iframe</title>
+</head>
+<body>
+  <p id="secure-context"></p>
+  <p id="null-origin"></p>
+  <script>
+    const isSecureContext = window.isSecureContext;
+    document.getElementById('secure-context').innerText = 'isSecureContext: ' + isSecureContext;
+    
+    const origin = window.origin;
+    document.getElementById('null-origin').innerText = 'origin: ' + origin;
+  </script>
+</body>
+</html>
+`;
