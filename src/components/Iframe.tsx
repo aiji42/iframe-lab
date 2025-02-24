@@ -25,6 +25,9 @@ export const Iframe = ({
         new Blob([iframe(iframeInner)], { type: "text/html" }),
       );
       break;
+    case "hosted same origin":
+      src = `/iframe?src=${iframeInnerKey}`;
+      break;
     default:
       throw new Error("Invalid src type");
   }

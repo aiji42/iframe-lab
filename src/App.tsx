@@ -4,8 +4,7 @@ import { sandboxes } from "./constants/sandbox.ts";
 import { parseAsString, parseAsArrayOf, useQueryState } from "nuqs";
 import { Iframe } from "./components/Iframe.tsx";
 import { allows } from "./constants/allow.ts";
-
-const srcTypes = ["data:text/html", "blob"] as const;
+import { srcTypes } from "./constants/src-type.ts";
 
 const App = () => {
   const [iframeInnerKey, setIframeInnerKey] = useQueryState("inner", {
