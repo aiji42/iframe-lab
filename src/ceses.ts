@@ -82,19 +82,29 @@ export const cases = [
   {
     label: "Clipboard",
     key: "clipboard",
-    value: `<button>Copy</button>
+    value: `<button id="write">Clipboard Write</button><button id="read">Clipboard Read</button>
 <p></p> 
 <script>
-  const button = document.querySelector("button");
+  const writeButton = document.getElementById("write");
+  const readButton = document.getElementById("read");
   const p = document.querySelector("p");
-  button.addEventListener("click", async () => {
+  writeButton.addEventListener("click", async () => {
+    p.innerText = "";
     try {
       await navigator.clipboard.writeText("Hello, World!");
-      p.innerText = "Copied!";
+      p.innerText = "Copied to clipboard";
     } catch (err) {
       p.innerText = err.message;
     }
-  });
+  }
+  readButton.addEventListener("click", async () => {
+    p.innerText = "";
+    try {
+      p.innerText = 'Clipboard read: ' + await navigator.clipboard.readText();
+    } catch (err) {
+      p.innerText = err.message;
+    }
+  }
 </script>`,
   },
 ];
