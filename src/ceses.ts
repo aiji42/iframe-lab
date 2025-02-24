@@ -96,7 +96,7 @@ export const cases = [
     } catch (err) {
       p.innerText = err.message;
     }
-  }
+  })
   readButton.addEventListener("click", async () => {
     p.innerText = "";
     try {
@@ -104,7 +104,7 @@ export const cases = [
     } catch (err) {
       p.innerText = err.message;
     }
-  }
+  })
 </script>`,
   },
 ];
