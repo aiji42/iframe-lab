@@ -32,7 +32,7 @@ export const cases = [
   <button id="stop">Stop</button>
 </div>
 <p></p>
-<video id="video" width="640" height="480" autoplay style="border: 1px solid black;"></video>
+<video id="video" width="320" height="240" autoplay style="border: 1px solid black;"></video>
   <script>
     const video = document.getElementById('video');
     const startButton = document.getElementById('start');
@@ -92,7 +92,7 @@ export const cases = [
     p.innerText = "";
     try {
       await navigator.clipboard.writeText("Hello, World!");
-      p.innerText = "Copied to clipboard";
+      p.innerText = "Copied to clipboard ('Hello, World!')";
     } catch (err) {
       p.innerText = err.message;
     }

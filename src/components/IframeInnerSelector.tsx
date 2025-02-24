@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 
 export const IframeInnerSelector = ({
   id,
@@ -14,6 +14,7 @@ export const IframeInnerSelector = ({
   code: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [open, toggle] = useReducer((o) => !o, false);
 
   useEffect(() => {
     if (ref.current) ref.current.dataset.highlighted = "";
@@ -36,11 +37,21 @@ export const IframeInnerSelector = ({
           </option>
         ))}
       </select>
-      <pre className="border-2 border-t-0 rounded-b-sm hidden sm:block">
-        <code className="language-html" ref={ref}>
-          {code}
-        </code>
-      </pre>
+      <div
+        className={`relative overflow-hidden border-2 border-t-0 rounded-b-sm ${open ? "" : "h-30"}`}
+      >
+        <pre>
+          <code className="language-html" ref={ref}>
+            {code + "\n\n"}
+          </code>
+        </pre>
+        <button
+          className="absolute bottom-0 w-full mx-auto text-white font-bold cursor-pointer py-2 backdrop-blur-[2px]"
+          onClick={toggle}
+        >
+          {open ? "Close" : "Open"}
+        </button>
+      </div>
     </div>
   );
 };

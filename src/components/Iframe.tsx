@@ -9,7 +9,7 @@ export const Iframe = ({
 }: {
   srcType: string;
   iframeInnerKey: string;
-  sandbox: string[];
+  sandbox: string[] | null;
   allow: string[];
 }) => {
   const iframeInner = cases.find((c) => c.key === iframeInnerKey)?.value;
@@ -37,10 +37,10 @@ export const Iframe = ({
 
   return (
     <iframe
-      key={src + sandbox.join("") + allow.join("")}
+      key={src + sandbox?.join("") + allow.join("")}
       src={src}
-      sandbox={sandbox.join(" ")}
-      className="border-2 rounded-sm w-full"
+      sandbox={sandbox?.join(" ")}
+      className="border-2 rounded-sm w-full h-100"
       allow={allow.join("; ")}
     />
   );
