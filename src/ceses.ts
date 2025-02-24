@@ -55,4 +55,24 @@ export const cases = [
     });
   </script>`,
   },
+  {
+    label: "Geolocation",
+    key: "geolocation",
+    value: `<button>Get Location</button>
+<p></p>
+<script>
+  const button = document.querySelector("button");
+  const p = document.querySelector("p");
+  button.addEventListener("click", async () => {
+    try {
+      const { coords } = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      p.innerText = \`Latitude: \${coords.latitude}, Longitude: \${coords.longitude}\`;
+    } catch (err) {
+      p.innerText = err.message;
+    }
+  });
+</script>`,
+  },
 ];
