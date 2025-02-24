@@ -15,4 +15,14 @@ export const cases = [
 </script>
   `,
   },
+  {
+    label: "Check Downloadable blob URL",
+    value: `<a>Download</a>
+<script>
+  const a = document.querySelector("a");
+  a.href = URL.createObjectURL(new Blob(["Hello, World!"]));
+  a.download = "hello.txt";
+</script>
+  `,
+  },
 ];
