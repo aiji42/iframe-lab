@@ -31,19 +31,23 @@ export const cases = [
   <button id="start">Start</button>
   <button id="stop">Stop</button>
 </div>
+<p></p>
 <video id="video" width="640" height="480" autoplay style="border: 1px solid black;"></video>
   <script>
     const video = document.getElementById('video');
     const startButton = document.getElementById('start');
     const stopButton = document.getElementById('stop');
+    const p = document.querySelector('p');
     let stream;
 
     startButton.addEventListener('click', async () => {
+      p.innerText = '';
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
       } catch (err) {
         console.error(err);
+        p.innerText = err.message;
       }
     });
 
@@ -69,6 +73,24 @@ export const cases = [
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
       p.innerText = \`Latitude: \${coords.latitude}, Longitude: \${coords.longitude}\`;
+    } catch (err) {
+      p.innerText = err.message;
+    }
+  });
+</script>`,
+  },
+  {
+    label: "Clipboard",
+    key: "clipboard",
+    value: `<button>Copy</button>
+<p></p> 
+<script>
+  const button = document.querySelector("button");
+  const p = document.querySelector("p");
+  button.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText("Hello, World!");
+      p.innerText = "Copied!";
     } catch (err) {
       p.innerText = err.message;
     }
