@@ -5,10 +5,12 @@ export const Iframe = ({
   srcType,
   iframeInnerKey,
   sandbox,
+  allow,
 }: {
   srcType: string;
   iframeInnerKey: string;
   sandbox: string[];
+  allow: string[];
 }) => {
   const iframeInner = cases.find((c) => c.key === iframeInnerKey)?.value;
   if (!iframeInner) throw new Error("Invalid iframe inner key");
@@ -29,11 +31,11 @@ export const Iframe = ({
 
   return (
     <iframe
-      key={src + sandbox.join("")}
+      key={src + sandbox.join("") + allow.join("")}
       src={src}
       sandbox={sandbox.join(" ")}
       className="border-2 rounded-sm w-full"
-      allow="camera"
+      allow={allow.join(" ")}
     />
   );
 };
