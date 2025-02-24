@@ -1,34 +1,23 @@
-import { useReducer, useState } from "react";
 import { cases } from "./ceses.ts";
-import { iframe } from "./utils/iframe.ts";
 import { IframeInnerSelector } from "./components/IframeInnerSelector.tsx";
 import { sandboxes } from "./constants/sandbox.ts";
+import { parseAsString, parseAsArrayOf, useQueryState } from "nuqs";
+import { Iframe } from "./components/Iframe.tsx";
 
 const srcTypes = ["data:text/html", "blob"] as const;
 
 const App = () => {
-  const [iframeInner, setIframeInner] = useState(cases[0].value);
-  const [sandbox, setSandbox] = useReducer(
-    (state: string[], selected: string) => {
-      if (state.includes(selected)) {
-        return state.filter((s) => s !== selected);
-      } else {
-        return [...state, selected];
-      }
-    },
-    [sandboxes[0]],
+  const [iframeInnerKey, setIframeInnerKey] = useQueryState("inner", {
+    defaultValue: cases[0].key,
+  });
+  const [sandbox, setSandbox] = useQueryState(
+    "sandbox",
+    parseAsArrayOf(parseAsString).withDefault([sandboxes[0]]),
   );
 
-  const [srcType, setSrcType] = useState<(typeof srcTypes)[number]>(
-    srcTypes[0],
-  );
-
-  const src =
-    srcType === "data:text/html"
-      ? `data:text/html,${iframeInner}`
-      : URL.createObjectURL(
-          new Blob([iframe(iframeInner)], { type: "text/html" }),
-        );
+  const [srcType, setSrcType] = useQueryState("src", {
+    defaultValue: srcTypes[0],
+  });
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -59,9 +48,10 @@ const App = () => {
             </label>
             <IframeInnerSelector
               id="iframe-inner"
-              value={iframeInner}
-              options={cases}
-              onChange={setIframeInner}
+              value={iframeInnerKey}
+              options={cases.map((c) => ({ label: c.label, value: c.key }))}
+              onChange={setIframeInnerKey}
+              code={cases.find((c) => c.key === iframeInnerKey)?.value ?? ""}
             />
           </div>
         </div>
@@ -73,7 +63,13 @@ const App = () => {
               <input
                 type="checkbox"
                 checked={sandbox.includes(s)}
-                onChange={() => setSandbox(s)}
+                onChange={(e) =>
+                  setSandbox(
+                    e.target.checked
+                      ? [...sandbox, s]
+                      : sandbox.filter((v) => v !== s),
+                  )
+                }
               />
               {s}
             </label>
@@ -83,11 +79,10 @@ const App = () => {
 
       <div>
         <label className="text-2xl">iframe</label>
-        <iframe
-          key={src + sandbox.join("")}
-          src={src}
-          sandbox={sandbox.join(" ")}
-          className="border-2 rounded-sm w-full"
+        <Iframe
+          srcType={srcType}
+          iframeInnerKey={iframeInnerKey}
+          sandbox={sandbox}
         />
       </div>
     </div>

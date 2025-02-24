@@ -5,11 +5,13 @@ export const IframeInnerSelector = ({
   value,
   options,
   onChange,
+  code,
 }: {
   id?: string;
   value: string;
   options: { value: string; label: string }[];
   onChange: (v: string) => void;
+  code: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -36,7 +38,7 @@ export const IframeInnerSelector = ({
       </select>
       <pre className="border-2 border-t-0 rounded-b-sm hidden sm:block">
         <code className="language-html" ref={ref}>
-          {value}
+          {code}
         </code>
       </pre>
     </div>
