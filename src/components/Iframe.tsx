@@ -29,7 +29,7 @@ export const Iframe = ({
       src = `/iframe?src=${iframeInnerKey}`;
       break;
     case "same-site":
-      src = `https://sub.${location.host}/?src=${iframeInnerKey}`;
+      src = `https://sub.${location.host}/iframe?src=${iframeInnerKey}`;
       break;
     default:
       throw new Error("Invalid src type");
