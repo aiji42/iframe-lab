@@ -107,4 +107,18 @@ export const cases = [
   })
 </script>`,
   },
+  {
+    label: "Accessable parent",
+    key: "accessableParent",
+    value: `<p></p>
+<script>
+  const p = document.querySelector("p");
+  try {
+    p.innerText = "Parent title: " + window.parent.document.title;
+  } catch (err) {
+    p.innerText = err.message;
+  }
+</script>
+`,
+  },
 ];
