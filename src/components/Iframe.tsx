@@ -33,6 +33,7 @@ export const Iframe = ({
       src={src}
       sandbox={sandbox.join(" ")}
       className="border-2 rounded-sm w-full"
+      allow="camera"
     />
   );
 };
