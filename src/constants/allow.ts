@@ -1,6 +1,8 @@
 export const allows = [
   "bluetooth",
   "camera",
+  "clipboard-write",
+  "clipboard-read",
   "geolocation",
   "hid",
   "micropohone",
