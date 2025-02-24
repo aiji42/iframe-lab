@@ -20,7 +20,7 @@ const App = () => {
   );
 
   const [srcType, setSrcType] = useQueryState("src", {
-    defaultValue: srcTypes[0],
+    defaultValue: srcTypes[0].key,
   });
 
   return (
@@ -31,17 +31,17 @@ const App = () => {
         <div className="flex flex-col gap-4">
           <fieldset>
             <legend className="text-xl mb-2">src</legend>
-            {srcTypes.map((type) => (
+            {srcTypes.map(({ key, label }) => (
               <label
-                key={type}
+                key={key}
                 className="flex items-center gap-2 mb-1.5 text-lg"
               >
                 <input
                   type="radio"
-                  checked={srcType === type}
-                  onChange={() => setSrcType(type)}
+                  checked={srcType === key}
+                  onChange={() => setSrcType(key)}
                 />
-                {type}
+                {label}
               </label>
             ))}
           </fieldset>

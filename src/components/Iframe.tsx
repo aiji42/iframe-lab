@@ -17,7 +17,7 @@ export const Iframe = ({
 
   let src = "";
   switch (srcType) {
-    case "data:text/html":
+    case "data":
       src = `data:text/html,${iframe(iframeInner)}`;
       break;
     case "blob":
@@ -25,8 +25,11 @@ export const Iframe = ({
         new Blob([iframe(iframeInner)], { type: "text/html" }),
       );
       break;
-    case "hosted same origin":
+    case "same-origin":
       src = `/iframe?src=${iframeInnerKey}`;
+      break;
+    case "same-site":
+      src = `https://sub.${location.host}/?src=${iframeInnerKey}`;
       break;
     default:
       throw new Error("Invalid src type");
