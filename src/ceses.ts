@@ -197,4 +197,77 @@ export const cases = [
   });
 </script>`,
   },
+  {
+    label: "Storage API",
+    key: "storage",
+    value: `<button id="testLocalStorage">Test LocalStorage</button>
+<button id="testSessionStorage">Test SessionStorage</button>
+<button id="testIndexedDB">Test IndexedDB</button>
+<pre id="log"></pre>
+
+  <script>
+  function log(message) {
+    document.getElementById('log').textContent += message + '\\n';
+    console.log(message);
+  }
+
+// LocalStorage Test
+document.getElementById('testLocalStorage').addEventListener('click', () => {
+  try {
+    log("Testing LocalStorage...");
+    localStorage.setItem("testKey", "LocalStorage Test Value");
+    const value = localStorage.getItem("testKey");
+    log("LocalStorage Read: " + value);
+  } catch (error) {
+    log("LocalStorage Error: " + error);
+  }
+});
+
+// SessionStorage Test
+document.getElementById('testSessionStorage').addEventListener('click', () => {
+  try {
+    log("Testing SessionStorage...");
+    sessionStorage.setItem("testKey", "SessionStorage Test Value");
+    const value = sessionStorage.getItem("testKey");
+    log("SessionStorage Read: " + value);
+  } catch (error) {
+    log("SessionStorage Error: " + error);
+  }
+});
+
+// IndexedDB Test
+document.getElementById('testIndexedDB').addEventListener('click', () => {
+  try {
+    log("Testing IndexedDB...");
+    const request = indexedDB.open("testDB", 1);
+
+    request.onupgradeneeded = (event) => {
+      log("IndexedDB Upgrade Needed.");
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains("testStore")) {
+        db.createObjectStore("testStore", { keyPath: "id" });
+      }
+    };
+
+    request.onsuccess = (event) => {
+      log("IndexedDB Opened Successfully.");
+      const db = event.target.result;
+      const transaction = db.transaction("testStore", "readwrite");
+      const store = transaction.objectStore("testStore");
+      store.put({ id: 1, value: "IndexedDB Test Value" });
+
+      store.get(1).onsuccess = (event) => {
+        log("IndexedDB Read: " + event.target.result.value);
+      };
+    };
+
+    request.onerror = (event) => {
+      log("IndexedDB Error: " + event.target.error);
+    };
+  } catch (error) {
+    log("IndexedDB Error: " + error);
+  }
+});
+</script>`,
+  },
 ];
