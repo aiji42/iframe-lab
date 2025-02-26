@@ -270,4 +270,43 @@ document.getElementById('testIndexedDB').addEventListener('click', () => {
 });
 </script>`,
   },
+  {
+    label: "Open Child Window",
+    key: "childWindow",
+    value: `<button id="openWindow">Open Child Window</button>
+<button id="sendMessage">Send Message to Child</button>
+<pre id="log"></pre>
+<script>
+  let childWindow;
+  
+  function log(message) {
+    document.getElementById('log').textContent += message + '\\n';
+    console.log(message);
+  }
+  
+  document.getElementById('openWindow').addEventListener('click', () => {
+    log("Opening child window...");
+    childWindow = window.open("/child", "ChildWindow", "width=400,height=300");
+  
+    if (childWindow) {
+      log("Child window opened.");
+    } else {
+      log("Failed to open child window.");
+    }
+  });
+  
+  document.getElementById('sendMessage').addEventListener('click', () => {
+    if (childWindow) {
+      log("Sending message to child...");
+      childWindow.postMessage("Hello from parent!", "*");
+    } else {
+      log("No child window available.");
+    }
+  });
+  
+  window.addEventListener('message', (event) => {
+    log("Received message from child: " + event.data);
+  });
+</script>`,
+  },
 ];
