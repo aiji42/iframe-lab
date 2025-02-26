@@ -121,4 +121,47 @@ export const cases = [
 </script>
 `,
   },
+  {
+    label: "WebSocket",
+    key: "websocket",
+    value: `    <pre id="log"></pre>
+
+    <script>
+        function log(message) {
+            document.getElementById('log').textContent += message + '\\n';
+            console.log(message);
+        }
+
+        function testWebSocket() {
+            const wsServerUrl = "wss://echo.websocket.org";
+
+            log("Connecting to WebSocket server: " + wsServerUrl);
+
+            try {
+                const socket = new WebSocket(wsServerUrl);
+
+                socket.onopen = () => {
+                    log("WebSocket connection opened!");
+                    socket.send("Hello, WebSocket!");
+                };
+
+                socket.onmessage = (event) => {
+                    log("Received message: " + event.data);
+                };
+
+                socket.onerror = (event) => {
+                    log("WebSocket error: " + event);
+                };
+
+                socket.onclose = () => {
+                    log("WebSocket connection closed.");
+                };
+            } catch (error) {
+                log("WebSocket failed: " + error);
+            }
+        }
+
+        testWebSocket();
+    </script>`,
+  },
 ];
