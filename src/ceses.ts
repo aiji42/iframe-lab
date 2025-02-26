@@ -124,44 +124,77 @@ export const cases = [
   {
     label: "WebSocket",
     key: "websocket",
-    value: `    <pre id="log"></pre>
+    value: `<pre id="log"></pre>
+<script>
+    function log(message) {
+      document.getElementById('log').textContent += message + '\\n';
+      console.log(message);
+    }
 
-    <script>
-        function log(message) {
-            document.getElementById('log').textContent += message + '\\n';
-            console.log(message);
-        }
+    function testWebSocket() {
+      const wsServerUrl = "wss://echo.websocket.org";
+      log("Connecting to WebSocket server: " + wsServerUrl);
+      try {
+        const socket = new WebSocket(wsServerUrl);
+        socket.onopen = () => {
+          log("WebSocket connection opened!");
+          socket.send("Hello, WebSocket!");
+        };
+        socket.onmessage = (event) => {
+          log("Received message: " + event.data);
+        };
+        socket.onerror = (event) => {
+          log("WebSocket error: " + event);
+        };
+        socket.onclose = () => {
+          log("WebSocket connection closed.");
+        };
+      } catch (error) {
+        log("WebSocket failed: " + error);
+      }
+    }
 
-        function testWebSocket() {
-            const wsServerUrl = "wss://echo.websocket.org";
+    testWebSocket();
+</script>`,
+  },
+  {
+    label: "File System Access",
+    key: "filesystemAccess",
+    value: `<button id="openFile">Open File</button>
+<button id="saveFile">Save File</button>
+<pre id="log"></pre>
+<script>
+  function log(message) {
+    document.getElementById('log').textContent += message + '\\n';
+    console.log(message);
+  }
 
-            log("Connecting to WebSocket server: " + wsServerUrl);
+  document.getElementById('openFile').addEventListener('click', async () => {
+    try {
+      log("Opening file picker...");
+      const [fileHandle] = await window.showOpenFilePicker();
+      const file = await fileHandle.getFile();
+      const text = await file.text();
+      log("File opened: " + file.name);
+      log("File content: " + text);
+    } catch (error) {
+      log("Error opening file: " + error);
+    }
+  });
 
-            try {
-                const socket = new WebSocket(wsServerUrl);
-
-                socket.onopen = () => {
-                    log("WebSocket connection opened!");
-                    socket.send("Hello, WebSocket!");
-                };
-
-                socket.onmessage = (event) => {
-                    log("Received message: " + event.data);
-                };
-
-                socket.onerror = (event) => {
-                    log("WebSocket error: " + event);
-                };
-
-                socket.onclose = () => {
-                    log("WebSocket connection closed.");
-                };
-            } catch (error) {
-                log("WebSocket failed: " + error);
-            }
-        }
-
-        testWebSocket();
-    </script>`,
+  document.getElementById('saveFile').addEventListener('click', async () => {
+    try {
+      log("Opening save file picker...");
+      const fileHandle = await window.showSaveFilePicker();
+      const writable = await fileHandle.createWritable();
+      const text = "Hello, FileSystem Access API!";
+      await writable.write(text);
+      await writable.close();
+      log("File saved successfully.");
+    } catch (error) {
+      log("Error saving file: " + error);
+    }
+  });
+</script>`,
   },
 ];
